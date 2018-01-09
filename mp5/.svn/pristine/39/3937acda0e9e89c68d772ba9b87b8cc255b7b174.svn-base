@@ -1,3 +1,0 @@
-.text,knockd_filter_function
-.init.text,knockd_init
-.exit.text,knockd_exit
