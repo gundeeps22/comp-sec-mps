@@ -1,0 +1,24 @@
+mschoi2 total : 80/100
+Testing md5_length_extension	15.0/15	
+1.2.1.2.txt *Passed*
+
+1.2.1.2.py *Passed*
+
+Testing md5_goodevil_collision	15.0/15	
+1.2.3 MD5 *Passed*
+
+1.2.3 Output *Passed*
+
+MD5 of good.py, evil.py: 335604105b144a90ecd1cb504ea9ce05, 335604105b144a90ecd1cb504ea9ce05
+
+Output of good.py: I come in peace.
+Output of evil.py: Prepare to be destroyed!
+
+Testing padding_oracle	25.0/25	
+1.2.3.txt *Passed*
+
+Testing ps_and_qs	25.0/25	
+1.2.4.txt *Passed*
+
+Testing certcollision	0.0/20	Solution files are empty. Aborting.
+

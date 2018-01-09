@@ -1,0 +1,18 @@
+grade report for mschoi2
+
+4.1.2 SQL
+grade for 4.1.2: 5/5
+comment for 4.1.2:  
+
+4.1.3 Prepared Statements
+grade for 4.1.3: 5/5
+comment for 4.1.3:
+
+4.1.4 Input Sanitization
+grade for 4.1.4: 5/5
+comment for 4.1.4: 
+
+4.1.5 Token Validation
+grade for 4.1.5: 5/5
+comment for 4.1.5:
+TOTAL: 20/20

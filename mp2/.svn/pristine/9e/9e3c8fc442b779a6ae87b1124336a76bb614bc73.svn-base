@@ -1,0 +1,21 @@
+MP2 checkpoint 1 grade for jeung2 (partner: )
+
+2.1.1_addr  : 0/2
+Comment : 'Expected 8048f20. Got .'
+
+2.1.1_eax  : 0/2
+Comment : 'Expected 7ece422. Got .'
+
+2.1.2  : 0/4
+Comment : 'Got .'
+
+2.1.3  : 0/4
+Comment : 'Got .'
+
+2.1.4  : 0/4
+Comment : 'Got .'
+
+2.1.5  : 0/4
+Comment : 'Shell was not running'
+
+total   : 0/20

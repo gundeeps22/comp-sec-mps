@@ -1,0 +1,35 @@
+MP3 Checkpoint 1 Grade Report for mschoi2
+Total:	19 / 20
+
+Details:
+3.1.1	 9 / 10
+3.1.1.1	 2 / 3
+	+1 valid ip and mac address: pass
+	+0 local ip address: fail
+	+1 local mac address: pass
+3.1.1.2	 1 / 1
+	+1 number of tcp conversation: pass
+3.1.1.3	 2 / 2
+	+2 gateway ip: pass
+3.1.1.4	 3 / 3
+	+1 identifying active ftp: pass
+	+1 identifying passive ftp: pass
+	+1 content retrieval: pass
+3.1.1.5	 1 / 1
+	+1 port scanner ip: pass
+
+3.1.2	 10 / 10
+3.1.2.1	 1 / 1
+	+1 year: pass
+3.1.2.2	 1 / 1
+	+1 hostname: pass
+3.1.2.3	 1 / 1
+	+1 cipher suite list: pass
+3.1.2.4	 1 / 1
+	+1 chosen cipher suite: pass
+3.1.2.5	 2 / 2
+	+2 first name: pass
+3.1.2.6	 3 / 3
+	+3 message sent: pass
+3.1.2.7	 1 / 1
+	+1 cookie: pass

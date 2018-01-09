@@ -1,0 +1,11 @@
+small
+=====
+
+My friend handed me this binary a few days ago, and told me that the password is
+3 characters long. I haven't been able to guess it though, as it keeps crashing
+on me. A rather strange binary, and pretty small to boot, too! Can you help me
+with this?
+
+-- jarsp
+
+P.S.  The flag (i.e. the answer) will be in the form `flag{xxxx}`.

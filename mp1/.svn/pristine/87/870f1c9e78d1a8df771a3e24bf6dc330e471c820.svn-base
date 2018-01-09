@@ -1,0 +1,14 @@
+mschoi2 total : 15/100
+Testing md5_length_extension	15.0/15	
+1.2.1.2.txt *Passed*
+
+1.2.1.2.py *Passed*
+
+Testing md5_goodevil_collision	0.0/15	Solution files are empty. Aborting.
+
+Testing padding_oracle	0.0/25	Solution files are empty. Aborting.
+
+Testing ps_and_qs	0.0/25	Solution files are empty. Aborting.
+
+Testing certcollision	0.0/20	Solution files are empty. Aborting.
+
