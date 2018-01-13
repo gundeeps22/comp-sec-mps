@@ -20,11 +20,29 @@ So for your general working environment, you need to:
 
 #### 1.1.1.2 Converting Hexadecimal to Binary and Decimal
 
-[hex to decimal](http://www.binaryhexconverter.com/hex-to-decimal-converter)
+To convert from [hex to dec](http://www.binaryhexconverter.com/hex-to-decimal-converter), multiply each digit by base 16 raised to digit location and add it all up.
 
-[hex to binary](http://www.binaryhexconverter.com/hex-to-binary-converter)
+e.g. 7DE = (7 * 16<sup>2</sup>) + (13 * 16<sup>1</sup>) + (14 * 16<sup>0</sup>) = 2014
+
+To convert from [hex to bin](http://www.binaryhexconverter.com/hex-to-binary-converter), change each digit to binary and append them all.
+
+e.g. 7 = 0111, D = 1101, E = 1110; 7DE = 0111 1101 1110
 
 #### 1.1.2.1 Substitution Cipher
+
+The ciphertext is as shown:
+
+	UVKG IXWVIAFPW QIFGTPXIG TB KVI KXIX XGCVRUFGSXA RZ JTPLXPCFTPG SXUA FP CSFG JFCZ FP 1929  1949
+
+The key to decode it is 
+
+	VRJAXBWSFEDUNPTQOIGCMLKHZY
+
+which means V is A, R is B, J is C, and so on in alphabetical order.
+
+You are to write a **python script** that takes *the ciphertext file*, *the key file*, and *the output file* as three arguments from the command line and successfully write the decoded plaintext to the output file.
+
+There are many ways to approach this problem, but I used Python dictionary to help me map.
 
 #### 1.1.2.2 Decrypting AES
 
