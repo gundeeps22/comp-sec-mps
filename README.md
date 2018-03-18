@@ -1,6 +1,6 @@
 # comp-sec-mps
 
-This is a personal guide to working machine problems in **CS461: Computer Security I** and a portfolio for me to keep track of what I have learned in the class. It is not intended to just give out my code to future students; in fact, many of the answers are going to be *different* due to hashing for each student. Other students, however, can refer to this guide for help whenever they are stuck on a problem or in need of a place to get started with, but please do not take advantage of this guide to get work done.
+This is a personal guide to working machine problems in **CS461: Computer Security I** and a portfolio for me to keep track of what I have learned in the class. It is not intended to give out solutions to future students; in fact, students should refer to the solutions at their own risk. They can, however, definitely use this guide for help whenever they are stuck on a problem or in need of a place to get started with, but please do not take advantage of this guide to get work done.
 
 ## Getting Started
 
@@ -40,13 +40,17 @@ The key to decode it is
 
 which means V is A, R is B, J is C, and so on in alphabetical order.
 
-You are to write a **python script** that takes *the ciphertext file*, *the key file*, and *the output file* as three arguments from the command line and successfully write the decoded plaintext to the output file.
+You are to write a **python script** that takes the *ciphertext file*, *key file*, and *output file* as three arguments from the command line and successfully write the decoded plaintext to the output file.
 
-There are many ways to approach this problem, but I used Python dictionary to help me map.
+There are many ways to approach this problem, but I used Python dictionary for mapping.
 
 #### 1.1.2.2 Decrypting AES
 
+Given the *cyphertext file*, *key file*, and *IV file*, use PyCrypto library to feed in as arguments and let it decrypt for you. The encryption uses AES in CBC mode.
+
 #### 1.1.2.3 Breaking a Weak AES Key
+
+
 
 #### 1.1.2.4 Decrypting a Ciphertext with RSA
 
