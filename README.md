@@ -16,6 +16,12 @@ So for your general working environment, you need to:
 
 ## MP1: Cryptography
 
+Objectives for this MP:
+* Become familiar with existing cryptographic libraries and how to utilize them
+* Understand pitfalls in cryptography and appreciate why you should not write your own cryptographic libraries
+* Execute a classic cryptographic attack on MD5 and other broken cryptographic algorithms
+* Appreciate why you should use HMAC-SHA256 as a substitute for common hash functions
+
 ### Checkpoint 1
 
 #### 1.1.1.2 Converting Hexadecimal to Binary and Decimal
@@ -138,13 +144,96 @@ Starting with the last and second to last blocks, utilize the padding oracle set
 
 #### 1.2.4 Mining Your Ps and Qs
 
-Bad RSA implementations fail to generate unique prime numbers. The given RSA moduli are generated without sufficient entropy. Find common factors in efficient algorithm. Compute RSA equation **d = e<sup>-1</sup>(p-1)(q-1)** for each, and you'll find about 100 private keys. Use them to recover the plaintext.
+Bad RSA implementations fail to generate unique prime numbers. The given RSA moduli are generated without sufficient entropy. Find common factors in efficient algorithm. Compute RSA equation **d = e<sup>-1</sup> % (p-1)(q-1)** for each, and you'll find about 100 private keys. Use them to recover the plaintext.
 
 #### 1.2.5 Creating Colliding Certificates
 
 ## MP2: Application Security
 
+Objectives for this MP:
+* Be able to identify and avoid buffer overflow vulnerabilities in native code.
+* Understand the severity of buffer overflows and the necessity of standard defenses.
+* Gain familiarity with machine architecture and assembly language.
 
+*C files for this MP are missing, so I do not remember some problems. Also, I drew pictures of stacks most of the time, so I do not have a lot of explanations for most problems.*
+
+### Checkpoint 1
+
+#### 2.1.1 GDB Practice
+
+Store the return address of the function *practice* in **2.1.1_addr.txt**:
+```
+(gdb) b practice  // set a breakpoint at function practice
+(gdb) r           // run up to the breakpoint
+(gdb) x $ebp+4    // RA is always right above/below ebp, depending on how you look at the stack.
+```
+Store the value of eax right before *practice* returns:
+```
+(gdb) disas practice  // disassemble practice
+(gdb) b *0x????????   // set a breakpoint at the address of the ret instruction
+(gdb) c               // continue to the breakpoint
+(gdb) info reg        // view the contents of eax
+```
+
+#### 2.1.2 Assembly Practice
+
+Push the arguments in the right order so that the C function prints out "Good job!".
+
+#### 2.1.3 Assembly Practice with Pointers
+
+Think about how pointers are pushed!
+
+#### 2.1.4 Assembly Practice with Pointers and Strings
+
+Think about how strings are pushed!
+
+#### 2.1.5 Introduction to Linux System Calls
+
+Invoke a system call using int 0x80 to open a shell.
+
+### Checkpoint 2
+
+#### 2.2.1 Overwriting a Variable on the Stack
+
+Think about how name[] and grade[] are stored relative to each other. How could a value read into name[] affect the value contained in grade[]?
+
+#### 2.2.2 Overwriting the Return Address
+
+Find where the buffer overflow occurs, pad right up to the return address, and overwrite the return address with the address of the function *print_good_grade*.
+
+#### 2.2.3 Redirecting Control to Shellcode
+
+Find where the buffer overflow occurs, inject shellcode, pad right up to the return address, and overwrite the return address with the shellcode address.
+
+#### 2.2.4 Overwriting the Return Address Indirectly
+
+Hint: Play with the dereferencing pointers!
+
+#### 2.2.5 Beyond Strings
+
+Integer overflow.
+
+#### 2.2.6 Bypassing DEP
+
+Use return-2-libc attack. More info [here](https://tehaurum.wordpress.com/2015/06/24/exploit-development-stack-buffer-overflow-bypass-nxdep/).
+
+#### 2.2.7 Variable Stack Position
+
+Use NOP slide/sled.
+
+#### 2.2.8 Linked List Exploitation
+
+Play around with *prev* and *next* pointers of the linked list! Also, how can you skip deformed instructions?
+
+#### 2.2.9 Return-Oriented Programming
+
+Find useful ROP gadgets and arrange them correctly on the stack.
+
+#### 2.2.10 Callback Shell
+
+Implement your own callback shell. More info [here](https://www.rcesecurity.com/2014/07/slae-shell-reverse-tcp-shellcode-linux-x86/).
+
+#### 2.2.11 Format String Attack
 
 ## MP3: Network Security
 
