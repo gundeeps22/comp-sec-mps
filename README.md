@@ -40,7 +40,7 @@ The key to decode it is
 
 which means V is A, R is B, J is C, and so on in alphabetical order.
 
-You are to write a **python script** that takes the *ciphertext file*, *key file*, and *output file* as three arguments from the command line and successfully write the decoded plaintext to the output file.
+You are to write a **Python script** that takes the *ciphertext file*, *key file*, and *output file* as three arguments from the command line and successfully write the decoded plaintext to the output file.
 
 There are many ways to approach this problem, but I used Python dictionary for mapping.
 
@@ -50,27 +50,101 @@ Given the *cyphertext file*, *key file*, and *IV file*, use PyCrypto library to 
 
 #### 1.1.2.3 Breaking a Weak AES Key
 
+The same process as above, except you are only given the *ciphertext file*. What you know is that the *initialization vector* is all set to 0s and the *key* is 256 bits long and its 251 leftmost bits are all 0s. Use the same Python script that you implemented above, but make your own IV file with 32 0's and **brute-force** the five rightmost bits of the key to find one correct plaintext. Your job is to find this key.
 
+*Remember the IV file and the key file is in .hex file. IV is 128 bits long, which is why we fill in 32 zeros (128 / 4 = 32). The key is 256 bits long (= 64 hex digits), and we only need to manipulate the last 2 hex digits (up to 1F), brute-forcing at most 32 keys.*
 
 #### 1.1.2.4 Decrypting a Ciphertext with RSA
 
+You are to write a **Python script** that takes the *ciphertext file*, *key file*, *modulo file*, and *output file* as four arguments from the command line and successfully write the decoded prime number to the output file. The prime number is encrypted with 1024-bit RSA. RSA tutorial [here](https://www.youtube.com/watch?v=wXB-V_Keiu8) but general idea:
+
+**m = c<sup>d</sup> mod n**
+
+where m is plaintext, c is ciphertext, d is decryption key, and n is modulo.
+
 #### 1.1.3.1 Avalanche Effect
 
+You are given an *input string* and a *perturb string*. The perturbed string is an exact copy of the input string but one flipped bit. You are to write a **Python script** that generates the SHA-256 hash of both strings and counts how many bits are different (computes the Hamming distance).
+
+Recall the avalanche effect is the desirable property in cryptography: A slight change in input significantly changes the output.
+
 #### 1.1.3.2 Weak Hashing Algorithm
+
+Carefully inspect the weak hashing algorithm given to you:
+```
+WHA:
+Input{inStr: a binary string of bytes}
+Output{outHash: 32-bit hashcode for the inStr as a series of hex values}
+Mask: 0x3FFFFFFF
+outHash: 0
+for byte in input
+	intermediate_value = ((byte XOR 0xCC) Left Shift 24) OR
+			     ((byte XOR 0x33) Left Shift 16) OR
+			     ((byte XOR 0xAA) Left Shift 8) OR
+			     (byte XOR 0x55)
+	outHash = (outHash AND Mask) + (intermediate_value AND Mask)
+return outHash
+```
+and you'll eventually realize the outHash value is just the sum of intermediate values. In other words, the order of the characters in the *input string* does not matter as long as you are using the same exact characters! Just play around with the arrangement of the given input string, and you'll see they all give out the same hash.
 
 ### Checkpoint 2
 
 #### 1.2.1.2 Conduct a Length Extension Attack
 
+Knowing the length of the password and its MD5 hash, we can append a malicious string that will still output the same MD5 hash. You are given a query, and you are going to append "command3" that deletes all files.
+
+Here, token is the MD5 hash of (8-character password || data) where data is "user=... (to the rest of URL)". Compute the new token after updating with command3 and utilize the fact that it equals the MD5 hash of **m + padding(len(m) * 8) + x**, where m is the original message and x is the length extension.
+
 #### 1.2.2.2 MD5 Hash Collision Attack
+
+Make a *prefix* file containing the code:
+```
+#!/usr/bin/python
+# -*- coding: utf-8 -*-
+blob = """
+```
+and make a *suffix* file containing the code:
+```
+"""
+from hashlib import sha256
+print sha256(blob).hexdigest()
+```
+Then, use the fastcoll program given to you to generate two files with the same MD5 hash that both begin with *prefix*.
+```
+$ fastcoll -p prefix -o col1 col2
+```
+Append the *suffix* to both and verify that file1.py and file2.py have the same MD5 hash but generate different output.
+```
+$ cat col1 suffix > file1.py; cat col2 suffix > file2.py
+```
+In short,
+
+**prefix + md5 collision value A (blob A) + suffix = sha256 hash A**
+
+**prefix + md5 collision value B (blob B) + suffix = sha256 hash B**
+
+Now all you need to do is copy down those sha256 hashes and make a script that spits out a different text according to the sha256 hash.
 
 #### 1.2.3 Exploiting a Padding Oracle
 
+The ciphertext is encrypted with AES using a random IV and a fixed secret key.
+
+Before encrypting, the plaintext was padded using a **padding scheme**: the first byte of padding is 0x10, the next byte is 0x0f, and so on. For example,
+* “a” becomes “a\x10\x0f...\x02”
+* “abcde” becomes “abcde\x10\x0f...\x06”
+* “abcdefghijklmnop” becomes “abcdefghijklmnop\x10\x0f...\x01”
+
+Starting with the last and second to last blocks, utilize the padding oracle set up for you to check the integrity of your ciphertext. More info on padding oracle [here](https://www.youtube.com/watch?v=evrgQkULQ5U).
+
 #### 1.2.4 Mining Your Ps and Qs
+
+Bad RSA implementations fail to generate unique prime numbers. The given RSA moduli are generated without sufficient entropy. Find common factors in efficient algorithm. Compute RSA equation **d = e<sup>-1</sup>(p-1)(q-1)** for each, and you'll find about 100 private keys. Use them to recover the plaintext.
 
 #### 1.2.5 Creating Colliding Certificates
 
 ## MP2: Application Security
+
+
 
 ## MP3: Network Security
 
